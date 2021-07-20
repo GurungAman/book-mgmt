@@ -9,7 +9,7 @@
 
 2. Get book by id:
 - type: GET
-- url: book_api/__id__/
+- url: book_api/\__id__/
 - headers: {
     'X-CSRFToken': {csrf_token}
 }
@@ -37,7 +37,7 @@
 
 4. Update Book:
 - type: PUT
-- url: book_api/__id__/
+- url: book_api/\__id__/
 - contentType: 'application/json'
 - headers: {
     'X-CSRFToken': {csrf_token}
@@ -53,7 +53,7 @@
 
 5. Delete Book:
 - type: DELETE
-- url: book_api/__id__/
+- url: book_api/\__id__/
 - headers: {
     'X-CSRFToken': {csrf_token}
 }
