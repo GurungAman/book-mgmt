@@ -1,0 +1,119 @@
+{% extends "base.html" %}
+
+{% block title %} Homepage {% endblock title %}
+
+{% block body %}
+<div class="conatiner mt-5">
+
+    <div class="h1 text-center">Book List</div>
+    <div class="row">
+        <div class="col d-flex justify-content-center">
+            <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#Modal">Add Book +</button>
+        </div>
+    </div>
+
+    <div class="modal fade" id="Modal" tabindex="-1" role="dialog" aria-labelledby="ModalTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="Title">Add Book</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col text-center">
+                                Book Name:
+                            </div>
+                            <div class="col">
+                                <input type="text" id="book-name" class="form-control" placeholder="Book name">
+                            </div>
+                        </div>
+                        <div class="row mt-2">
+                            <div class="col text-center">
+                                ISBN:
+                            </div>
+                            <div class="col">
+                                <input type="text" id="isbn" class="form-control" placeholder="ISBN">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" onclick="add_book()">Add book</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <table class="table m-auto w-75">
+        <thead>
+            <tr>
+                <th class="col">Id</th>
+                <th class="col">Book Name</th>
+                <th class="col">ISBN</th>
+            </tr>
+        </thead>
+        <tbody>
+
+            {% for book in books %}
+            <tr>
+                <th class="col">{{ book.id }}</th>
+                <td class="col">
+                    <a href="/detail/{{book.id}}">
+                        {{ book.name }}
+                    </a>
+                </td>
+                <td class="col">{{ book.ISBN }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<div class="container mt-3 d-flex justify-content-center">
+    <div class="row justify-content-center">
+        <ul class="pagination">
+            {% if page_obj.has_previous %}
+            <li class="page-item">
+                <a class="page-link" href="?page=1">
+                    <span aria-hidden="true">&laquo;</span>
+                    <span class="sr-only">Start</span>
+                </a>
+            </li>
+            {% endif %}
+    
+            {% for n in page_obj.paginator.page_range %}
+            {% if page_obj.number == n %}
+            <li class="page-item active">
+                <span class="page-link">{{ n }}<span class="sr-only">(current)</span></span>
+            </li>
+            {% elif n > page_obj.number|add:'-3' and n < page_obj.number|add:'3' %} <li class="page-item"><a
+                    class="page-link" href="?page={{ n }}">{{ n }}</a></li>
+                {% endif %}
+                {% endfor %}
+    
+                {% if page_obj.has_next %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">
+                        <span aria-hidden="true">&raquo;</span>
+                        <span class="sr-only">end</span>
+                    </a>
+                </li>
+                {% endif %}
+        </ul>
+    </div>
+</div>
+{% endblock body %}
+
+{% block script %}
+<script>
+    $(document).ready(function () {
+        get_book_list()
+    })
+</script>
+{% endblock script %}
