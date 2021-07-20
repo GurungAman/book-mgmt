@@ -80,41 +80,6 @@ function delete_book() {
   });
 }
 
-function get_book_list() {
-  const csrftoken = document.cookie.toString().split("=")[1];
-  $.ajax({
-    url: "/book_list_api/",
-    headers: {
-      "X-CSRFToken": csrftoken,
-    },
-    type: "GET",
-    success: function (data) {
-      for (let i = 0; i < data["results"].length; i++) {
-        books = data["results"][i];
-        append_to_table(books);
-      }
-    },
-    error: function (data) {
-      console.log(data);
-    },
-  });
-}
-
-function append_to_table(books) {
-  $("tbody").append(
-    "<tr><th>" +
-      books["id"] +
-      "</th><td>" +
-      "<a href='detail/" +
-      books["id"] +
-      "'>" +
-      books["name"] +
-      "</a></td><td>" +
-      books["ISBN"] +
-      "</td></tr>"
-  );
-}
-
 function get_book(book_id) {
   const csrftoken = document.cookie.toString().split("=")[1];
   $.ajax({
