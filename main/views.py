@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect
+from rest_framework import pagination
 from rest_framework.permissions import  IsAuthenticatedOrReadOnly
 from main.models import Book
 from .serializers import BookSerializer
@@ -58,9 +59,16 @@ class BookView(APIView):
     }
     permission_classes = [IsAuthenticatedOrReadOnly]
 
-    def get(self, request, pk):
-        books = Book.objects.get(pk=pk)
-        books_serializer = BookSerializer(books)
+    def get(self, request, pk=None):
+        if pk is not None:
+            books = Book.objects.get(pk=pk)
+            books_serializer = BookSerializer(books)
+            book = books_serializer.data
+            self.response['status'] = True
+            self.response['book'] = book
+            return Response(self.response)
+        books = Book.objects.all().order_by('-id')
+        books_serializer = BookSerializer(books, many=True)
         book = books_serializer.data
         self.response['status'] = True
         self.response['book'] = book
